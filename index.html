@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ResusCoach CPR</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="phone" aria-label="CPR training app prototype">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">CPR Training Platform</p>
+            <h1>ResusCoach</h1>
+          </div>
+          <button class="icon-button" id="resetSession" aria-label="セッションをリセット">↺</button>
+        </header>
+
+        <section class="hero-panel">
+          <div class="pulse-visual" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div>
+            <p class="status-pill">Instructor mode ready</p>
+            <h2>蘇生トレーニングを、評価からディブリーフィングまで一気通貫で支援</h2>
+            <p>一般市民向けBLSから医療従事者向けチーム訓練まで、圧迫品質、AED導線、役割行動を同じ画面設計で管理します。</p>
+          </div>
+        </section>
+
+        <nav class="tabs" aria-label="主要画面">
+          <button class="tab active" data-view="train">訓練</button>
+          <button class="tab" data-view="feedback">評価</button>
+          <button class="tab" data-view="report">報告</button>
+          <button class="tab" data-view="debrief">振返り</button>
+        </nav>
+
+        <section id="train" class="view active">
+          <div class="section-heading">
+            <h3>セッション設定</h3>
+            <span>02:00</span>
+          </div>
+
+          <div class="segmented" role="group" aria-label="ユーザー種別">
+            <button class="segment active" data-role="public">一般市民</button>
+            <button class="segment" data-role="provider">医療従事者</button>
+          </div>
+
+          <div class="field-grid">
+            <label>
+              <span>シナリオ</span>
+              <select id="scenario">
+                <option>成人BLS・院外心停止</option>
+                <option>院内急変・チーム蘇生</option>
+                <option>小児BLS・呼吸原性心停止</option>
+                <option>AED到着遅延シナリオ</option>
+              </select>
+            </label>
+            <label>
+              <span>参照プロファイル</span>
+              <select id="guideline">
+                <option>AHA 2025 CPR/ECC</option>
+                <option>ERC 2025 Guidelines</option>
+                <option>ILCOR CoSTR 2025</option>
+                <option>施設プロトコル</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="metric-strip">
+            <article>
+              <strong id="targetRate">100-120</strong>
+              <span>圧迫/分</span>
+            </article>
+            <article>
+              <strong id="targetDepth">5-6 cm</strong>
+              <span>成人目標</span>
+            </article>
+            <article>
+              <strong>&lt;10秒</strong>
+              <span>中断目標</span>
+            </article>
+          </div>
+
+          <button class="primary-action" id="startTraining">トレーニング開始</button>
+
+          <article class="guideline-card">
+            <h4>グローバルガイドライン対応</h4>
+            <p id="guidelineCopy">2025年版AHA CPR/ECC、ERC、ILCOR CoSTRを参照元として、コースごとに評価基準を切り替える想定です。</p>
+            <div class="source-links">
+              <a href="https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines" target="_blank" rel="noreferrer">AHA</a>
+              <a href="https://www.erc.edu/science-research/guidelines/guidelines-2025/guidelines-2025-english?agree=1" target="_blank" rel="noreferrer">ERC</a>
+              <a href="https://ilcor.org/news/ilcor-consensus-on-science-with-treatment-recommendations" target="_blank" rel="noreferrer">ILCOR</a>
+            </div>
+          </article>
+        </section>
+
+        <section id="feedback" class="view">
+          <div class="section-heading">
+            <h3>リアルタイム評価</h3>
+            <span id="timer">00:00</span>
+          </div>
+
+          <div class="score-ring" aria-live="polite">
+            <div>
+              <strong id="score">86</strong>
+              <span>Quality score</span>
+            </div>
+          </div>
+
+          <div class="feedback-list">
+            <article>
+              <div>
+                <strong>圧迫テンポ</strong>
+                <span id="rateText">適正範囲内</span>
+              </div>
+              <meter id="rateMeter" min="60" max="150" low="95" high="125" optimum="110" value="112"></meter>
+            </article>
+            <article>
+              <div>
+                <strong>圧迫深度</strong>
+                <span id="depthText">やや浅い</span>
+              </div>
+              <meter id="depthMeter" min="2" max="8" low="4.8" high="6.2" optimum="5.5" value="4.8"></meter>
+            </article>
+            <article>
+              <div>
+                <strong>リコイル</strong>
+                <span id="recoilText">良好</span>
+              </div>
+              <meter id="recoilMeter" min="0" max="100" low="75" high="95" optimum="95" value="91"></meter>
+            </article>
+          </div>
+
+          <div class="controls">
+            <label>
+              <span>圧迫/分</span>
+              <input id="rateInput" type="range" min="70" max="140" value="112" />
+            </label>
+            <label>
+              <span>深度 cm</span>
+              <input id="depthInput" type="range" min="3" max="7" step="0.1" value="4.8" />
+            </label>
+            <label>
+              <span>完全リコイル %</span>
+              <input id="recoilInput" type="range" min="40" max="100" value="91" />
+            </label>
+          </div>
+        </section>
+
+        <section id="report" class="view">
+          <div class="section-heading">
+            <h3>インストラクターレポート</h3>
+            <span id="reportGrade">A-</span>
+          </div>
+
+          <div class="report-grid">
+            <article>
+              <span>圧迫品質</span>
+              <strong id="reportCompression">88%</strong>
+            </article>
+            <article>
+              <span>AED導線</span>
+              <strong>92%</strong>
+            </article>
+            <article>
+              <span>中断管理</span>
+              <strong>81%</strong>
+            </article>
+            <article>
+              <span>チーム連携</span>
+              <strong id="teamScore">--</strong>
+            </article>
+          </div>
+
+          <article class="timeline">
+            <h4>イベントタイムライン</h4>
+            <ol>
+              <li><span>00:12</span> 反応確認と応援要請</li>
+              <li><span>00:24</span> 胸骨圧迫開始</li>
+              <li><span>00:56</span> AED装着、解析前中断 7秒</li>
+              <li><span>01:28</span> 圧迫交代、テンポ維持</li>
+            </ol>
+          </article>
+
+          <button class="secondary-action" id="exportReport">PDFレポート準備</button>
+        </section>
+
+        <section id="debrief" class="view">
+          <div class="section-heading">
+            <h3>ディブリーフィング</h3>
+            <span>Plus / Delta</span>
+          </div>
+
+          <article class="coach-note">
+            <h4>重点フィードバック</h4>
+            <p id="coachNote">圧迫テンポは良好です。深度が浅くなる局面があるため、疲労前の交代タイミングを明確化してください。</p>
+          </article>
+
+          <div class="prompt-list">
+            <button data-prompt="compression">圧迫品質を振り返る</button>
+            <button data-prompt="team">チームコミュニケーション</button>
+            <button data-prompt="aed">AED使用の判断</button>
+          </div>
+
+          <textarea id="debriefNotes" placeholder="インストラクター所見、学習者の自己評価、次回課題を入力"></textarea>
+
+          <button class="primary-action" id="saveDebrief">振り返りを保存</button>
+        </section>
+
+        <footer class="bottom-nav" aria-label="補助情報">
+          <button class="active">Dashboard</button>
+          <button>Courses</button>
+          <button>Library</button>
+        </footer>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
